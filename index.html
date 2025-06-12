@@ -13,26 +13,26 @@
         <div class="row justify-content-center">
             <div class="col-12 col-md-8">
                 <form id="userForm" class="p-4 rounded bg-dark-subtle">
-                    <!-- Profile Picture -->
+                    
                     <div class="mb-3">
                         <label for="profilePic" class="form-label text-warning">Profile Picture</label>
                         <input type="file" class="form-control" id="profilePic" accept="image/*" required>
                         <img id="profilePicPreview" class="mt-2" alt="Profile Preview">
                     </div>
 
-                    <!-- Username -->
+                   
                     <div class="mb-3">
                         <label for="username" class="form-label text-warning">Username</label>
                         <input type="text" class="form-control" id="username" placeholder="Enter your username" required>
                     </div>
 
-                    <!-- Age -->
+                  
                     <div class="mb-3">
                         <label for="age" class="form-label text-warning">Age</label>
                         <input type="number" class="form-control" id="age" min="1" max="150" placeholder="Enter your age" required>
                     </div>
 
-                    <!-- Gender -->
+                    
                     <div class="mb-3">
                         <label class="form-label text-warning">Gender</label>
                         <div class="form-check">
@@ -45,7 +45,7 @@
                         </div>
                     </div>
 
-                    <!-- Role -->
+                  
                     <div class="mb-3">
                         <label for="role" class="form-label text-warning">Role</label>
                         <select class="form-select" id="role" required>
@@ -56,32 +56,30 @@
                         </select>
                     </div>
 
-                    <!-- Company -->
+                   
                     <div class="mb-3">
                         <label for="company" class="form-label text-warning">Company</label>
                         <select class="form-select" id="company" required>
                             <option value="" disabled selected>Select a company</option>
-                            <!-- Options will be populated via API -->
                         </select>
                     </div>
 
-                    <!-- Birthdate -->
+                    
                     <div class="mb-3">
                         <label for="birthdate" class="form-label text-warning">Birthdate</label>
                         <input type="date" class="form-control" id="birthdate" required>
                     </div>
 
-                    <!-- Address -->
+                   
                     <div class="mb-3">
                         <label for="address" class="form-label text-warning">Address</label>
                         <textarea class="form-control" id="address" rows="4" placeholder="Enter your full address" required></textarea>
                     </div>
 
-                    <!-- Submit Button -->
+                    
                     <button type="submit" class="btn btn-warning w-100">Submit</button>
                 </form>
 
-                <!-- User Card Display -->
                 <div id="userCard" class="mt-5"></div>
             </div>
         </div>
