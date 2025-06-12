@@ -40,13 +40,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // مدیریت submit فرم
+    
     const userForm = document.getElementById('userForm');
     const userCard = document.getElementById('userCard');
     userForm.addEventListener('submit', (e) => {
-        e.preventDefault(); // جلوگیری از رفرش صفحه
+        e.preventDefault();
 
-        // جمع‌آوری داده‌های فرم
+      
         const username = document.getElementById('username').value;
         const age = document.getElementById('age').value;
         const gender = document.querySelector('input[name="gender"]:checked').value;
@@ -56,10 +56,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const address = document.getElementById('address').value;
         const profilePic = profilePicPreview.src || '';
 
-        // مخفی کردن فرم
+       
         userForm.style.display = 'none';
 
-        // ساخت کارت کاربر
+      
         userCard.innerHTML = `
             <div class="card p-4">
                 <img src="${profilePic}" alt="Profile Picture" class="mx-auto">
@@ -73,10 +73,9 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `;
 
-        // نمایش کارت با انیمیشن
+        
         userCard.classList.add('visible');
     });
 
-    // فراخوانی تابع شرکت‌ها
     fetchCompanies();
 });
