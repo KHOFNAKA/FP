@@ -1,18 +1,14 @@
-
 body {
     font-family: Arial, sans-serif;
     min-height: 100vh;
     background-color: #212529;
 }
 
-
 .container {
     max-width: 800px;
 }
 
-
 #userForm {
-    
     input[type="file"] {
         background: #FFD700;
         color: #212529;
@@ -27,7 +23,6 @@ body {
         background: #DAA520;
     }
 
-    
     #profilePicPreview {
         max-width: 80px;
         max-height: 80px;
@@ -38,23 +33,23 @@ body {
     }
 }
 
-
 #userCard {
-    display: none; 
+    display: none;
     opacity: 0;
-    transform: scale(0.95);
-    transition: opacity 0.5s ease, transform 0.5s ease;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
 #userCard.visible {
     display: block;
     opacity: 1;
-    transform: scale(1);
+    transform: translateY(0);
 }
 
 #userCard .card {
     border: 2px solid #FFD700;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.6s ease-out forwards;
 }
 
 #userCard .card img {
@@ -64,70 +59,37 @@ body {
     border-radius: 50%;
     border: 3px solid #FFD700;
     margin-bottom: 15px;
-}
-#userCard  {
-
-  animation: fadeIn 0.5s ease-in-out;
-
+    animation: popIn 0.5s ease-out;
 }
 
-
-
-@keyframes fadeIn {
-
-  0% {
-
-    opacity: 0;
-
-  }
-
-  100% {
-
-    opacity: 1;
-
-  }
-
+#userCard .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-
-
-#userCard  {
-
-  animation: pulse 0.5s ease-in-out;
-
+@keyframes slideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-
-
-@keyframes pulse {
-
-  0% {
-
-    transform: scale(1);
-
-  }
-
-  50% {
-
-    transform: scale(1.05);
-
-  }
-
-  100% {
-
-    transform: scale(1);
-
-  }
-
+@keyframes popIn {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
-#userCard :hover {
-
-  transform: scale(1.05);
-
-  box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
-
-}
 @media (max-width: 576px) {
     #userCard .card img {
         width: 100px;
