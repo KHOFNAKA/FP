@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Form</title>
+    <title>مدیریت کاربران</title>
     <link href="assets/css/bootstrap.rtl.css" rel="stylesheet">
     <link href="assets/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link href="https://v1.fontapi.ir/css/Vazir" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/toastify.css">
 </head>
@@ -15,54 +16,54 @@
             <div class="col-12 col-md-8">
                 <form id="userForm" class="p-4 rounded bg-dark-subtle">
                     <div class="mb-3">
-                        <label for="profilePic" class="form-label text-warning">Profile Picture</label>
+                        <label for="profilePic" class="form-label text-warning">تصویر پروفایل</label>
                         <input type="file" class="form-control" id="profilePic" accept="image/*" required>
-                        <img id="profilePicPreview" class="mt-2" alt="Profile Preview">
+                        <img id="profilePicPreview" class="mt-2" alt="پیش‌نمایش پروفایل">
                     </div>
                     <div class="mb-3">
-                        <label for="username" class="form-label text-warning">Username</label>
-                        <input type="text" class="form-control" id="username" placeholder="Enter your username" required>
+                        <label for="username" class="form-label text-warning">نام کاربری</label>
+                        <input type="text" class="form-control" id="username" placeholder="نام کاربری خود را وارد کنید" required>
                     </div>
                     <div class="mb-3">
-                        <label for="age" class="form-label text-warning">Age</label>
-                        <input type="number" class="form-control" id="age" min="1" max="150" placeholder="Enter your age" required>
+                        <label for="age" class="form-label text-warning">سن</label>
+                        <input type="number" class="form-control" id="age" min="1" max="150" placeholder="سن خود را وارد کنید" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label text-warning">Gender</label>
+                        <label class="form-label text-warning">جنسیت</label>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="gender" id="male" value="Male" required>
-                            <label class="form-check-label text-warning" for="male">Male</label>
+                            <input class="form-check-input" type="radio" name="gender" id="male" value="مرد" required>
+                            <label class="form-check-label text-warning" for="male">مرد</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="gender" id="female" value="Female">
-                            <label class="form-check-label text-warning" for="female">Female</label>
+                            <input class="form-check-input" type="radio" name="gender" id="female" value="زن">
+                            <label class="form-check-label text-warning" for="female">زن</label>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="role" class="form-label text-warning">Role</label>
+                        <label for="role" class="form-label text-warning">نقش</label>
                         <select class="form-select" id="role" required>
-                            <option value="" disabled selected>Select a role</option>
-                            <option value="Manager">Manager</option>
-                            <option value="Deputy">Deputy</option>
-                            <option value="Employee">Employee</option>
+                            <option value="" disabled selected>یک نقش انتخاب کنید</option>
+                            <option value="مدیر">مدیر</option>
+                            <option value="معاون">معاون</option>
+                            <option value="کارمند">کارمند</option>
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="company" class="form-label text-warning">Company</label>
+                        <label for="company" class="form-label text-warning">شرکت</label>
                         <select class="form-select" id="company" required>
-                            <option value="" disabled selected>Select a company</option>
+                            <option value="" disabled selected>یک شرکت انتخاب کنید</option>
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="birthdate" class="form-label text-warning">Birthdate</label>
+                        <label for="birthdate" class="form-label text-warning">تاریخ تولد</label>
                         <input type="date" class="form-control" id="birthdate" required>
                     </div>
                     <div class="mb-3">
-                        <label for="address" class="form-label text-warning">Address</label>
-                        <textarea class="form-control" id="address" rows="4" placeholder="Enter your full address" required></textarea>
+                        <label for="address" class="form-label text-warning">آدرس</label>
+                        <textarea class="form-control" id="address" rows="4" placeholder="آدرس کامل خود را وارد کنید" required></textarea>
                     </div>
-                    <button type="submit" class="btn btn-warning w-100" id="submitBtn">Submit</button>
-                    <button type="button" class="btn btn-secondary w-100 mt-2" id="cancelEditBtn" style="display: none;">Cancel Edit</button>
+                    <button type="submit" class="btn btn-warning w-100" id="submitBtn">ثبت</button>
+                    <button type="button" class="btn btn-secondary w-100 mt-2" id="cancelEditBtn" style="display: none;">لغو ویرایش</button>
                 </form>
                 <div id="userCard" class="mt-5"></div>
             </div>

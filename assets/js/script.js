@@ -6,12 +6,12 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const response = await fetch('https://fakerapi.it/api/v2/companies?_quantity=10');
             if (!response.ok) {
-                throw new Error('Failed to fetch companies');
+                throw new Error('خطا در دریافت شرکت‌ها');
             }
             const data = await response.json();
             const companies = data.data;
             const companySelect = document.getElementById('company');
-            companySelect.innerHTML = '<option value="" disabled selected>Select a company</option>';
+            companySelect.innerHTML = '<option value="" disabled selected>یک شرکت انتخاب کنید</option>';
             companies.forEach(company => {
                 const option = document.createElement('option');
                 option.value = company.id;
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error('Error fetching companies:', error);
             const companySelect = document.getElementById('company');
-            companySelect.innerHTML = '<option value="" disabled selected>Error loading companies</option>';
+            companySelect.innerHTML = '<option value="" disabled selected>خطا در بارگذاری شرکت‌ها</option>';
         }
     }
 
@@ -69,16 +69,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const card = document.createElement('div');
             card.className = 'card p-4';
             card.innerHTML = `
-                <img src="${user.profilePic}" alt="Profile Picture" class="mx-auto">
+                <img src="${user.profilePic}" alt="تصویر پروفایل" class="mx-auto">
                 <h3 class="card-title text-center">${user.username}</h3>
-                <p class="card-text"><strong>Age:</strong> ${user.age}</p>
-                <p class="card-text"><strong>Gender:</strong> ${user.gender}</p>
-                <p class="card-text"><strong>Role:</strong> ${user.role}</p>
-                <p class="card-text"><strong>Company:</strong> ${user.company}</p>
-                <p class="card-text"><strong>Birthdate:</strong> ${user.birthdate}</p>
-                <p class="card-text"><strong>Address:</strong> ${user.address}</p>
-                <button class="btn btn-danger w-100 mt-2 delete-btn" data-id="${index}">Delete</button>
-                <button class="btn btn-primary w-100 mt-2 edit-btn" data-id="${index}">Edit</button>
+                <p class="card-text"><strong>سن:</strong> ${user.age}</p>
+                <p class="card-text"><strong>جنسیت:</strong> ${user.gender}</p>
+                <p class="card-text"><strong>نقش:</strong> ${user.role}</p>
+                <p class="card-text"><strong>شرکت:</strong> ${user.company}</p>
+                <p class="card-text"><strong>تاریخ تولد:</strong> ${user.birthdate}</p>
+                <p class="card-text"><strong>آدرس:</strong> ${user.address}</p>
+                <button class="btn btn-danger w-100 mt-2 delete-btn" data-id="${index}">حذف</button>
+                <button class="btn btn-primary w-100 mt-2 edit-btn" data-id="${index}">ویرایش</button>
             `;
             userCard.appendChild(card);
         });
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('address').value = user.address;
                 profilePicPreview.src = user.profilePic;
                 profilePicPreview.style.display = 'block';
-                document.getElementById('submitBtn').textContent = 'Update';
+                document.getElementById('submitBtn').textContent = 'به‌روزرسانی';
                 document.getElementById('cancelEditBtn').style.display = 'block';
             });
         });
@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
             }).showToast();
             editingUserId = null;
-            document.getElementById('submitBtn').textContent = 'Submit';
+            document.getElementById('submitBtn').textContent = 'ثبت';
             document.getElementById('cancelEditBtn').style.display = 'none';
         } else {
             users.push(user);
@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
         editingUserId = null;
         userForm.reset();
         profilePicPreview.style.display = 'none';
-        document.getElementById('submitBtn').textContent = 'Submit';
+        document.getElementById('submitBtn').textContent = 'ثبت';
         document.getElementById('cancelEditBtn').style.display = 'none';
     });
 
