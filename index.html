@@ -16,10 +16,13 @@
         <div class="container">
             <div class="d-flex justify-content-between align-items-center">
                 <h1 class="h4 mb-0 text-white">مدیریت کاربران</h1>
+                <button id="showStatsBtn" class="btn btn-warning btn-glow" title="نمایش آمار و کاربران">
+                    <i class="bi bi-bar-chart-line"></i>
+                </button>
             </div>
         </div>
     </header>
-    <div class="container mt-5">
+    <div class="container mt-5" id="formSection">
         <div class="row justify-content-center">
             <div class="col-12 col-md-8">
                 <form id="userForm" class="p-4 rounded bg-glass shadow-lg animate__animated animate__fadeInUp">
@@ -81,7 +84,30 @@
                     <button type="submit" class="btn btn-warning w-100 btn-glow" id="submitBtn">ثبت</button>
                     <button type="button" class="btn btn-secondary w-100 mt-2 btn-glow" id="cancelEditBtn" style="display: none;">لغو ویرایش</button>
                 </form>
-                <div id="userCard" class="mt-5"></div>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-5" id="statsSection" style="display: none;">
+        <header class="header-gradient p-3 shadow-sm">
+            <div class="container">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2 class="h4 mb-0 text-white">آمار و کاربران</h2>
+                    <button id="backToFormBtn" class="btn btn-warning btn-glow" title="برگشت به فرم">
+                        <i class="bi bi-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+        <div class="row justify-content-center mt-4">
+            <div class="col-12">
+                <h2 class="text-warning mb-4 text-center animate__animated animate__fadeInUp">آمار کاربران</h2>
+                <div id="statsCards" class="row g-3"></div>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-5">
+            <div class="col-12">
+                <h2 class="text-warning mb-4 text-center animate__animated animate__fadeInUp">لیست کاربران</h2>
+                <div id="userCard" class="row g-3"></div>
             </div>
         </div>
     </div>

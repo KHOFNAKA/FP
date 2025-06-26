@@ -2,6 +2,22 @@ document.addEventListener('DOMContentLoaded', () => {
     let users = JSON.parse(localStorage.getItem('users')) || [];
     let editingUserId = null;
 
+    const formSection = document.getElementById('formSection');
+    const statsSection = document.getElementById('statsSection');
+    const showStatsBtn = document.getElementById('showStatsBtn');
+    const backToFormBtn = document.getElementById('backToFormBtn');
+
+    showStatsBtn.addEventListener('click', () => {
+        formSection.style.display = 'none';
+        statsSection.style.display = 'block';
+        renderStats();
+    });
+
+    backToFormBtn.addEventListener('click', () => {
+        formSection.style.display = 'block';
+        statsSection.style.display = 'none';
+    });
+
     async function fetchCompanies() {
         try {
             const response = await fetch('https://fakerapi.it/api/v2/companies?_quantity=10');
@@ -83,23 +99,118 @@ document.addEventListener('DOMContentLoaded', () => {
         return isValid;
     }
 
+    function getSeason(birthdate) {
+        const date = new Date(birthdate);
+        const month = date.getMonth() + 1;
+        if (month >= 1 && month <= 3) return 'بهار';
+        if (month >= 4 && month <= 6) return 'تابستان';
+        if (month >= 7 && month <= 9) return 'پاییز';
+        return 'زمستان';
+    }
+
+    function calculateStats() {
+        if (!users.length) return null;
+
+        const ages = users.map(u => parseInt(u.age));
+        const youngest = users.reduce((min, u) => parseInt(u.age) < parseInt(min.age) ? u : min, users[0]);
+        const oldest = users.reduce((max, u) => parseInt(u.age) > parseInt(max.age) ? u : max, users[0]);
+        const averageAge = (ages.reduce((sum, age) => sum + age, 0) / ages.length).toFixed(1);
+
+        const rolesCount = {
+            مدیر: { total: 0, مرد: 0, زن: 0 },
+            معاون: { total: 0, مرد: 0, زن: 0 },
+            کارمند: { total: 0, مرد: 0, زن: 0 },
+        };
+
+        const seasons = { بهار: 0, تابستان: 0, پاییز: 0, زمستان: 0 };
+        users.forEach(user => {
+            rolesCount[user.role].total++;
+            rolesCount[user.role][user.gender]++;
+            seasons[getSeason(user.birthdate)]++;
+        });
+
+        const seasonPercentages = {};
+        for (const season in seasons) {
+            seasonPercentages[season] = ((seasons[season] / users.length) * 100).toFixed(1);
+        }
+
+        return { youngest, oldest, averageAge, rolesCount, seasonPercentages };
+    }
+
+    function renderStats() {
+        const statsCards = document.getElementById('statsCards');
+        const stats = calculateStats();
+        if (!stats) {
+            statsCards.innerHTML = '<div class="col-12"><p class="text-center text-muted">هیچ کاربری وجود ندارد.</p></div>';
+            return;
+        }
+
+        statsCards.innerHTML = `
+            <div class="col-md-4">
+                <div class="card p-3 text-center animate__animated animate__fadeInUp">
+                    <h3 class="text-warning">جوان‌ترین</h3>
+                    <p>${stats.youngest.username} (${stats.youngest.age} سال)</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card p-3 text-center animate__animated animate__fadeInUp">
+                    <h3 class="text-warning">مسن‌ترین</h3>
+                    <p>${stats.oldest.username} (${stats.oldest.age} سال)</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card p-3 text-center animate__animated animate__fadeInUp">
+                    <h3 class="text-warning">میانگین سنی</h3>
+                    <p>${stats.averageAge} سال</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card p-3 text-center animate__animated animate__fadeInUp">
+                    <h3 class="text-warning">تعداد نقش‌ها</h3>
+                    <p>مدیر: ${stats.rolesCount.مدیر.total}</p>
+                    <p>معاون: ${stats.rolesCount.معاون.total}</p>
+                    <p>کارمند: ${stats.rolesCount.کارمند.total}</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card p-3 text-center animate__animated animate__fadeInUp">
+                    <h3 class="text-warning">تفکیک جنسیتی</h3>
+                    <p>مدیر: ${stats.rolesCount.مدیر.مرد} مرد، ${stats.rolesCount.مدیر.زن} زن</p>
+                    <p>معاون: ${stats.rolesCount.معاون.مرد} مرد، ${stats.rolesCount.معاون.زن} زن</p>
+                    <p>کارمند: ${stats.rolesCount.کارمند.مرد} مرد، ${stats.rolesCount.کارمند.زن} زن</p>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card p-3 text-center animate__animated animate__fadeInUp">
+                    <h3 class="text-warning">تولد در فصل‌ها</h3>
+                    <p>بهار: ${stats.seasonPercentages.بهار}%</p>
+                    <p>تابستان: ${stats.seasonPercentages.تابستان}%</p>
+                    <p>پاییز: ${stats.seasonPercentages.پاییز}%</p>
+                    <p>زمستان: ${stats.seasonPercentages.زمستان}%</p>
+                </div>
+            </div>
+        `;
+    }
+
     function renderUsers() {
         const userCard = document.getElementById('userCard');
         userCard.innerHTML = '';
         users.forEach((user, index) => {
             const card = document.createElement('div');
-            card.className = 'card p-4';
+            card.className = 'col-md-6';
             card.innerHTML = `
-                <img src="${user.profilePic}" alt="تصویر پروفایل" class="mx-auto">
-                <h3 class="card-title text-center text-warning">${user.username}</h3>
-                <p class="card-text"><strong>سن:</strong> ${user.age}</p>
-                <p class="card-text"><strong>جنسیت:</strong> ${user.gender}</p>
-                <p class="card-text"><strong>نقش:</strong> ${user.role}</p>
-                <p class="card-text"><strong>شرکت:</strong> ${user.company}</p>
-                <p class="card-text"><strong>تاریخ تولد:</strong> ${user.birthdate}</p>
-                <p class="card-text"><strong>آدرس:</strong> ${user.address}</p>
-                <button class="btn btn-danger w-100 mt-2 btn-glow delete-btn" data-id="${index}">حذف</button>
-                <button class="btn btn-primary w-100 mt-2 btn-glow edit-btn" data-id="${index}">ویرایش</button>
+                <div class="card p-3 animate__animated animate__fadeInUp">
+                    <img src="${user.profilePic}" alt="تصویر پروفایل" class="mx-auto">
+                    <h5 class="card-title text-center text-warning">${user.username}</h5>
+                    <p class="card-text"><strong>سن:</strong> ${user.age}</p>
+                    <p class="card-text"><strong>جنسیت:</strong> ${user.gender}</p>
+                    <p class="card-text"><strong>نقش:</strong> ${user.role}</p>
+                    <p class="card-text"><strong>شرکت:</strong> ${user.company}</p>
+                    <p class="card-text"><strong>تاریخ تولد:</strong> ${user.birthdate}</p>
+                    <p class="card-text"><strong>آدرس:</strong> ${user.address}</p>
+                    <button class="btn btn-danger w-100 mt-2 btn-glow delete-btn" data-id="${index}">حذف</button>
+                    <button class="btn btn-primary w-100 mt-2 btn-glow edit-btn" data-id="${index}">ویرایش</button>
+                </div>
             `;
             userCard.appendChild(card);
         });
@@ -110,6 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 users.splice(id, 1);
                 localStorage.setItem('users', JSON.stringify(users));
                 renderUsers();
+                renderStats();
                 Toastify({
                     text: "کاربر با موفقیت حذف شد!",
                     duration: 3000,
@@ -120,6 +232,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.querySelectorAll('.edit-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
+                formSection.style.display = 'block';
+                statsSection.style.display = 'none';
+                document.getElementById('submitBtn').textContent = 'به‌روزرسانی';
+                document.getElementById('cancelEditBtn').style.display = 'block';
                 const id = parseInt(e.target.getAttribute('data-id'));
                 editingUserId = id;
                 const user = users[id];
@@ -132,8 +248,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('address').value = user.address;
                 profilePicPreview.src = user.profilePic;
                 profilePicPreview.style.display = 'block';
-                document.getElementById('submitBtn').textContent = 'به‌روزرسانی';
-                document.getElementById('cancelEditBtn').style.display = 'block';
             });
         });
     }
@@ -179,6 +293,9 @@ document.addEventListener('DOMContentLoaded', () => {
         userForm.reset();
         profilePicPreview.style.display = 'none';
         renderUsers();
+        renderStats();
+        formSection.style.display = 'none';
+        statsSection.style.display = 'block';
     });
 
     document.getElementById('cancelEditBtn').addEventListener('click', () => {
@@ -191,4 +308,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     fetchCompanies();
     renderUsers();
+    renderStats();
 });
