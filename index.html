@@ -9,24 +9,35 @@
     <link href="https://v1.fontapi.ir/css/Vazir" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/toastify.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body class="bg-dark">
+    <header class="header-gradient p-3 shadow-sm">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h4 mb-0 text-white">مدیریت کاربران</h1>
+            </div>
+        </div>
+    </header>
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-12 col-md-8">
-                <form id="userForm" class="p-4 rounded bg-dark-subtle">
+                <form id="userForm" class="p-4 rounded bg-glass shadow-lg animate__animated animate__fadeInUp">
                     <div class="mb-3">
                         <label for="profilePic" class="form-label text-warning">تصویر پروفایل</label>
-                        <input type="file" class="form-control" id="profilePic" accept="image/*" required>
-                        <img id="profilePicPreview" class="mt-2" alt="پیش‌نمایش پروفایل">
+                        <input type="file" class="form-control form-input-glow" id="profilePic" accept="image/*" required>
+                        <img id="profilePicPreview" class="mt-2 profile-pic-preview" alt="پیش‌نمایش پروفایل">
+                        <div id="profilePicError" class="error-message">لطفاً یک تصویر انتخاب کنید.</div>
                     </div>
                     <div class="mb-3">
                         <label for="username" class="form-label text-warning">نام کاربری</label>
-                        <input type="text" class="form-control" id="username" placeholder="نام کاربری خود را وارد کنید" required>
+                        <input type="text" class="form-control form-input-glow" id="username" placeholder="نام کاربری خود را وارد کنید" required>
+                        <div id="usernameError" class="error-message">نام کاربری نمی‌تواند خالی باشد.</div>
                     </div>
                     <div class="mb-3">
                         <label for="age" class="form-label text-warning">سن</label>
-                        <input type="number" class="form-control" id="age" min="1" max="150" placeholder="سن خود را وارد کنید" required>
+                        <input type="number" class="form-control form-input-glow" id="age" min="1" max="150" placeholder="سن خود را وارد کنید" required>
+                        <div id="ageError" class="error-message">سن باید بین ۱ تا ۱۵۰ باشد.</div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label text-warning">جنسیت</label>
@@ -38,32 +49,37 @@
                             <input class="form-check-input" type="radio" name="gender" id="female" value="زن">
                             <label class="form-check-label text-warning" for="female">زن</label>
                         </div>
+                        <div id="genderError" class="error-message">لطفاً جنسیت را انتخاب کنید.</div>
                     </div>
                     <div class="mb-3">
                         <label for="role" class="form-label text-warning">نقش</label>
-                        <select class="form-select" id="role" required>
+                        <select class="form-select form-input-glow" id="role" required>
                             <option value="" disabled selected>یک نقش انتخاب کنید</option>
                             <option value="مدیر">مدیر</option>
                             <option value="معاون">معاون</option>
                             <option value="کارمند">کارمند</option>
                         </select>
+                        <div id="roleError" class="error-message">لطفاً نقش را انتخاب کنید.</div>
                     </div>
                     <div class="mb-3">
                         <label for="company" class="form-label text-warning">شرکت</label>
-                        <select class="form-select" id="company" required>
+                        <select class="form-select form-input-glow" id="company" required>
                             <option value="" disabled selected>یک شرکت انتخاب کنید</option>
                         </select>
+                        <div id="companyError" class="error-message">لطفاً شرکت را انتخاب کنید.</div>
                     </div>
                     <div class="mb-3">
                         <label for="birthdate" class="form-label text-warning">تاریخ تولد</label>
-                        <input type="date" class="form-control" id="birthdate" required>
+                        <input type="date" class="form-control form-input-glow" id="birthdate" required>
+                        <div id="birthdateError" class="error-message">لطفاً تاریخ تولد را وارد کنید.</div>
                     </div>
                     <div class="mb-3">
                         <label for="address" class="form-label text-warning">آدرس</label>
-                        <textarea class="form-control" id="address" rows="4" placeholder="آدرس کامل خود را وارد کنید" required></textarea>
+                        <textarea class="form-control form-input-glow" id="address" rows="4" placeholder="آدرس کامل خود را وارد کنید" required></textarea>
+                        <div id="addressError" class="error-message">آدرس نمی‌تواند خالی باشد.</div>
                     </div>
-                    <button type="submit" class="btn btn-warning w-100" id="submitBtn">ثبت</button>
-                    <button type="button" class="btn btn-secondary w-100 mt-2" id="cancelEditBtn" style="display: none;">لغو ویرایش</button>
+                    <button type="submit" class="btn btn-warning w-100 btn-glow" id="submitBtn">ثبت</button>
+                    <button type="button" class="btn btn-secondary w-100 mt-2 btn-glow" id="cancelEditBtn" style="display: none;">لغو ویرایش</button>
                 </form>
                 <div id="userCard" class="mt-5"></div>
             </div>

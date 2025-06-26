@@ -19,9 +19,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 companySelect.appendChild(option);
             });
         } catch (error) {
-            console.error('Error fetching companies:', error);
+            console.error('Error:', error);
             const companySelect = document.getElementById('company');
             companySelect.innerHTML = '<option value="" disabled selected>خطا در بارگذاری شرکت‌ها</option>';
+            Toastify({
+                text: 'خطا در دریافت شرکت‌ها!',
+                duration: 3000,
+                backgroundColor: 'linear-gradient(to right, #dc3545, #b02a37)',
+            }).showToast();
         }
     }
 
@@ -42,24 +47,40 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function validateForm() {
-        const username = document.getElementById('username').value;
-        const age = document.getElementById('age').value;
-        const gender = document.querySelector('input[name="gender"]:checked');
-        const role = document.getElementById('role').value;
-        const company = document.getElementById('company').value;
-        const birthdate = document.getElementById('birthdate').value;
-        const address = document.getElementById('address').value;
-        const profilePic = profilePicInput.files[0];
+        let isValid = true;
+        const fields = [
+            { id: 'profilePic', errorId: 'profilePicError', check: () => profilePicInput.files[0] },
+            { id: 'username', errorId: 'usernameError', check: () => document.getElementById('username').value.trim() },
+            { id: 'age', errorId: 'ageError', check: () => {
+                const age = document.getElementById('age').value;
+                return age && age >= 1 && age <= 150;
+            }},
+            { id: 'gender', errorId: 'genderError', check: () => document.querySelector('input[name="gender"]:checked') },
+            { id: 'role', errorId: 'roleError', check: () => document.getElementById('role').value },
+            { id: 'company', errorId: 'companyError', check: () => document.getElementById('company').value },
+            { id: 'birthdate', errorId: 'birthdateError', check: () => document.getElementById('birthdate').value },
+            { id: 'address', errorId: 'addressError', check: () => document.getElementById('address').value.trim() },
+        ];
 
-        if (!profilePic || !username || !age || !gender || !role || !company || !birthdate || !address) {
+        fields.forEach(field => {
+            const errorElement = document.getElementById(field.errorId);
+            if (!field.check()) {
+                errorElement.style.display = 'block';
+                isValid = false;
+            } else {
+                errorElement.style.display = 'none';
+            }
+        });
+
+        if (!isValid) {
             Toastify({
-                text: "لطفاً تمام فیلدهای ضروری را پر کنید!",
+                text: 'لطفاً تمام فیلدهای ضروری را پر کنید!',
                 duration: 3000,
-                backgroundColor: "linear-gradient(to right, #ff4d4d, #cc0000)",
+                backgroundColor: 'linear-gradient(to right, #dc3545, #b02a37)',
             }).showToast();
-            return false;
         }
-        return true;
+
+        return isValid;
     }
 
     function renderUsers() {
@@ -70,15 +91,15 @@ document.addEventListener('DOMContentLoaded', () => {
             card.className = 'card p-4';
             card.innerHTML = `
                 <img src="${user.profilePic}" alt="تصویر پروفایل" class="mx-auto">
-                <h3 class="card-title text-center">${user.username}</h3>
+                <h3 class="card-title text-center text-warning">${user.username}</h3>
                 <p class="card-text"><strong>سن:</strong> ${user.age}</p>
                 <p class="card-text"><strong>جنسیت:</strong> ${user.gender}</p>
                 <p class="card-text"><strong>نقش:</strong> ${user.role}</p>
                 <p class="card-text"><strong>شرکت:</strong> ${user.company}</p>
                 <p class="card-text"><strong>تاریخ تولد:</strong> ${user.birthdate}</p>
                 <p class="card-text"><strong>آدرس:</strong> ${user.address}</p>
-                <button class="btn btn-danger w-100 mt-2 delete-btn" data-id="${index}">حذف</button>
-                <button class="btn btn-primary w-100 mt-2 edit-btn" data-id="${index}">ویرایش</button>
+                <button class="btn btn-danger w-100 mt-2 btn-glow delete-btn" data-id="${index}">حذف</button>
+                <button class="btn btn-primary w-100 mt-2 btn-glow edit-btn" data-id="${index}">ویرایش</button>
             `;
             userCard.appendChild(card);
         });
@@ -92,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 Toastify({
                     text: "کاربر با موفقیت حذف شد!",
                     duration: 3000,
-                    backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+                    backgroundColor: "linear-gradient(to right, #28a745, #218838)",
                 }).showToast();
             });
         });
@@ -140,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
             Toastify({
                 text: "کاربر با موفقیت به‌روزرسانی شد!",
                 duration: 3000,
-                backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+                backgroundColor: "linear-gradient(to right, #28a745, #218838)",
             }).showToast();
             editingUserId = null;
             document.getElementById('submitBtn').textContent = 'ثبت';
@@ -151,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
             Toastify({
                 text: "کاربر با موفقیت اضافه شد!",
                 duration: 3000,
-                backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+                backgroundColor: "linear-gradient(to right, #28a745, #218838)",
             }).showToast();
         }
 
