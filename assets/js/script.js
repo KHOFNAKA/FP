@@ -1,16 +1,21 @@
 document.addEventListener('DOMContentLoaded', () => {
     let users = JSON.parse(localStorage.getItem('users')) || [];
     let editingUserId = null;
+    let currentUsers = [...users];
 
     const formSection = document.getElementById('formSection');
     const statsSection = document.getElementById('statsSection');
     const showStatsBtn = document.getElementById('showStatsBtn');
     const backToFormBtn = document.getElementById('backToFormBtn');
+    const searchInput = document.getElementById('searchInput');
+    const genderFilter = document.getElementById('genderFilter');
+    const roleFilter = document.getElementById('roleFilter');
 
     showStatsBtn.addEventListener('click', () => {
         formSection.style.display = 'none';
         statsSection.style.display = 'block';
         renderStats();
+        renderUsers();
     });
 
     backToFormBtn.addEventListener('click', () => {
@@ -21,9 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function fetchCompanies() {
         try {
             const response = await fetch('https://fakerapi.it/api/v2/companies?_quantity=10');
-            if (!response.ok) {
-                throw new Error('خطا در دریافت شرکت‌ها');
-            }
+            if (!response.ok) throw new Error('خطا در دریافت شرکت‌ها');
             const data = await response.json();
             const companies = data.data;
             const companySelect = document.getElementById('company');
@@ -36,8 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         } catch (error) {
             console.error('Error:', error);
-            const companySelect = document.getElementById('company');
-            companySelect.innerHTML = '<option value="" disabled selected>خطا در بارگذاری شرکت‌ها</option>';
+            document.getElementById('company').innerHTML = '<option value="" disabled selected>خطا در بارگذاری شرکت‌ها</option>';
             Toastify({
                 text: 'خطا در دریافت شرکت‌ها!',
                 duration: 3000,
@@ -193,9 +195,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderUsers() {
-        const userCard = document.getElementById('userCard');
-        userCard.innerHTML = '';
-        users.forEach((user, index) => {
+        const userCards = document.getElementById('userCards');
+        userCards.innerHTML = '';
+        currentUsers.forEach((user, index) => {
             const card = document.createElement('div');
             card.className = 'col-md-6';
             card.innerHTML = `
@@ -212,20 +214,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     <button class="btn btn-primary w-100 mt-2 btn-glow edit-btn" data-id="${index}">ویرایش</button>
                 </div>
             `;
-            userCard.appendChild(card);
+            userCards.appendChild(card);
         });
 
         document.querySelectorAll('.delete-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                const id = parseInt(e.target.getAttribute('data-id'));
+                const id = parseInt(e.target.dataset.id);
                 users.splice(id, 1);
+                currentUsers = [...users];
                 localStorage.setItem('users', JSON.stringify(users));
+                resetFilters();
                 renderUsers();
                 renderStats();
                 Toastify({
-                    text: "کاربر با موفقیت حذف شد!",
+                    text: 'کاربر با موفقیت حذف شد!',
                     duration: 3000,
-                    backgroundColor: "linear-gradient(to right, #28a745, #218838)",
+                    backgroundColor: 'linear-gradient(to right, #28a745, #218838)',
                 }).showToast();
             });
         });
@@ -236,9 +240,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 statsSection.style.display = 'none';
                 document.getElementById('submitBtn').textContent = 'به‌روزرسانی';
                 document.getElementById('cancelEditBtn').style.display = 'block';
-                const id = parseInt(e.target.getAttribute('data-id'));
+                const id = parseInt(e.target.dataset.id);
                 editingUserId = id;
                 const user = users[id];
+                profilePicPreview.src = user.profilePic;
                 document.getElementById('username').value = user.username;
                 document.getElementById('age').value = user.age;
                 document.querySelector(`input[name="gender"][value="${user.gender}"]`).checked = true;
@@ -246,11 +251,56 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('company').value = user.companyId;
                 document.getElementById('birthdate').value = user.birthdate;
                 document.getElementById('address').value = user.address;
-                profilePicPreview.src = user.profilePic;
                 profilePicPreview.style.display = 'block';
             });
         });
     }
+
+    function resetFilters() {
+        searchInput.value = '';
+        genderFilter.value = '';
+        roleFilter.value = '';
+        currentUsers = [...users];
+    }
+
+    function filterAndSortUsers() {
+        let filteredUsers = [...users];
+        const searchQuery = searchInput.value.trim().toLowerCase();
+        const gender = genderFilter.value;
+        const role = roleFilter.value;
+
+        if (searchQuery) {
+            filteredUsers = filteredUsers.filter(user => user.username.toLowerCase().includes(searchQuery));
+        }
+        if (gender) {
+            filteredUsers = filteredUsers.filter(user => user.gender === gender);
+        }
+        if (role) {
+            filteredUsers = filteredUsers.filter(user => user.role === role);
+        }
+
+        currentUsers = filteredUsers;
+        renderUsers();
+    }
+
+    searchInput.addEventListener('input', filterAndSortUsers);
+    genderFilter.addEventListener('change', filterAndSortUsers);
+    roleFilter.addEventListener('change', filterAndSortUsers);
+
+    document.getElementById('sortByAgeAsc').addEventListener('click', () => {
+        currentUsers.sort((a, b) => parseInt(a.age) - parseInt(b.age));
+        renderUsers();
+    });
+
+    document.getElementById('sortByAgeDesc').addEventListener('click', () => {
+        currentUsers.sort((a, b) => parseInt(b.age) - parseInt(a.age));
+        renderUsers();
+    });
+
+    document.getElementById('sortByName').addEventListener('click', () => {
+        currentUsers.sort((a, b) => a.username.localeCompare(b.username));
+        renderUsers();
+    });
 
     const userForm = document.getElementById('userForm');
     userForm.addEventListener('submit', (e) => {
@@ -271,42 +321,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (editingUserId !== null) {
             users[editingUserId] = user;
-            localStorage.setItem('users', JSON.stringify(users));
             Toastify({
-                text: "کاربر با موفقیت به‌روزرسانی شد!",
+                text: 'کاربر با موفقیت به‌روزرسانی شد!',
                 duration: 3000,
-                backgroundColor: "linear-gradient(to right, #28a745, #218838)",
+                backgroundColor: 'linear-gradient(to right, #28a745, #218838)',
             }).showToast();
             editingUserId = null;
             document.getElementById('submitBtn').textContent = 'ثبت';
             document.getElementById('cancelEditBtn').style.display = 'none';
         } else {
             users.push(user);
-            localStorage.setItem('users', JSON.stringify(users));
             Toastify({
-                text: "کاربر با موفقیت اضافه شد!",
+                text: 'کاربر با موفقیت اضافه شد!',
                 duration: 3000,
-                backgroundColor: "linear-gradient(to right, #28a745, #218838)",
+                backgroundColor: 'linear-gradient(to right, #28a745, #218838)',
             }).showToast();
         }
 
-        userForm.reset();
-        profilePicPreview.style.display = 'none';
+        localStorage.setItem('users', JSON.stringify(users));
+        resetFilters();
         renderUsers();
         renderStats();
+        userForm.reset();
+        profilePicPreview.style.display = 'none';
         formSection.style.display = 'none';
         statsSection.style.display = 'block';
     });
 
     document.getElementById('cancelEditBtn').addEventListener('click', () => {
+        document.getElementById('cancelEditBtn').style.display = 'none';
         editingUserId = null;
         userForm.reset();
         profilePicPreview.style.display = 'none';
         document.getElementById('submitBtn').textContent = 'ثبت';
-        document.getElementById('cancelEditBtn').style.display = 'none';
     });
 
     fetchCompanies();
-    renderUsers();
     renderStats();
+    renderUsers();
 });

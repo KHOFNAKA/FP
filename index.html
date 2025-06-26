@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مدیریت کاربران</title>
-    <link href="assets/css/bootstrap.rtl.css" rel="stylesheet">
     <link href="assets/css/bootstrap.rtl.min.css" rel="stylesheet">
-    <link href="https://v1.fontapi.ir/css/Vazir" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/toastify.css">
+    <link href="https://v1.fontapi.ir/css/Vazir" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body class="bg-dark">
@@ -22,6 +21,7 @@
             </div>
         </div>
     </header>
+
     <div class="container mt-5" id="formSection">
         <div class="row justify-content-center">
             <div class="col-12 col-md-8">
@@ -81,12 +81,13 @@
                         <textarea class="form-control form-input-glow" id="address" rows="4" placeholder="آدرس کامل خود را وارد کنید" required></textarea>
                         <div id="addressError" class="error-message">آدرس نمی‌تواند خالی باشد.</div>
                     </div>
-                    <button type="submit" class="btn btn-warning w-100 btn-glow" id="submitBtn">ثبت</button>
+                    <button type="submit" id="submitBtn" class="btn btn-warning w-100 btn-glow">ثبت</button>
                     <button type="button" class="btn btn-secondary w-100 mt-2 btn-glow" id="cancelEditBtn" style="display: none;">لغو ویرایش</button>
                 </form>
             </div>
         </div>
     </div>
+
     <div class="container mt-5" id="statsSection" style="display: none;">
         <header class="header-gradient p-3 shadow-sm">
             <div class="container">
@@ -107,11 +108,30 @@
         <div class="row justify-content-center mt-5">
             <div class="col-12">
                 <h2 class="text-warning mb-4 text-center animate__animated animate__fadeInUp">لیست کاربران</h2>
-                <div id="userCard" class="row g-3"></div>
+                <div class="mb-4">
+                    <input type="text" id="searchInput" class="form-control form-input-glow" placeholder="جستجو بر اساس نام کاربری...">
+                </div>
+                <div class="mb-4 d-flex flex-wrap gap-2">
+                    <button id="sortByAgeAsc" class="btn btn-outline-warning btn-glow"><i class="bi bi-sort-numeric-up"></i> سن (صعودی)</button>
+                    <button id="sortByAgeDesc" class="btn btn-outline-warning btn-glow"><i class="bi bi-sort-numeric-down"></i> سن (نزولی)</button>
+                    <button id="sortByName" class="btn btn-outline-warning btn-glow"><i class="bi bi-sort-alpha-down"></i> نام</button>
+                    <select id="genderFilter" class="form-select w-auto form-input-glow">
+                        <option value="">همه جنسیت‌ها</option>
+                        <option value="مرد">مرد</option>
+                        <option value="زن">زن</option>
+                    </select>
+                    <select id="roleFilter" class="form-select w-auto form-input-glow">
+                        <option value="">همه نقش‌ها</option>
+                        <option value="کارمند">کارمند</option>
+                        <option value="مدیر">مدیر</option>
+                        <option value="معاون">معاون</option>
+                    </select>
+                </div>
+                <div id="userCards" class="row g-3"></div>
             </div>
         </div>
     </div>
-    <script src="assets/js/bootstrap.bundle.js"></script>
+
     <script src="assets/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/toastify.js"></script>
     <script src="assets/js/script.js"></script>

@@ -68,7 +68,7 @@ body {
     }
 }
 
-#statsCards .card, #userCard .card {
+#statsCards .card, #userCards .card {
     border: 2px solid #f7b731;
     background: rgba(52, 58, 64, 0.7);
     backdrop-filter: blur(10px);
@@ -79,7 +79,12 @@ body {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-#userCard .card img {
+#statsCards .card:hover, #userCards .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+#userCards .card img {
     width: 100px;
     height: 100px;
     object-fit: cover;
@@ -87,11 +92,6 @@ body {
     border: 3px solid #f7b731;
     margin-bottom: 1rem;
     animation: popIn 0.5s ease-out;
-}
-
-#statsCards .card:hover, #userCard .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
 }
 
 @keyframes fadeInUp {
@@ -110,11 +110,11 @@ body {
 }
 
 @media (max-width: 576px) {
-    #userCard .card img {
+    #userCards .card img {
         width: 80px;
         height: 80px;
     }
-    #statsCards .card, #userCard .card {
+    #statsCards .card, #userCards .card {
         margin-bottom: 1rem;
     }
     .container {
